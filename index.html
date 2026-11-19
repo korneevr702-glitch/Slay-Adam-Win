@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLAY 2026 Fan — Stream Legends Awards</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    :root {
+      --bg: #0a0a0c;
+      --card: #141418;
+      --card-hover: #1c1c22;
+      --orange: #ff6b00;
+      --orange-soft: #ff8c33;
+      --text: #ffffff;
+      --text-muted: #a0a0a8;
+      --border: #2a2a32;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10, 10, 12, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-size: 28px; font-weight: 800; color: var(--orange); text-decoration: none; }
+    .logo span { color: white; }
+    nav a { color: var(--text-muted); text-decoration: none; margin-left: 28px; font-weight: 500; font-size: 15px; transition: color 0.2s; }
+    nav a:hover { color: var(--orange); }
+    .hero {
+      padding: 70px 0 50px; text-align: center;
+      background: radial-gradient(ellipse at 50% 0%, rgba(255, 107, 0, 0.15) 0%, transparent 60%);
+    }
+    .hero h1 { font-size: clamp(36px, 6vw, 60px); font-weight: 800; line-height: 1.1; margin-bottom: 16px; }
+    .hero h1 .accent { color: var(--orange); }
+    .hero p { font-size: 17px; color: var(--text-muted); max-width: 560px; margin: 0 auto 24px; }
+    .badge {
+      display: inline-block; background: rgba(255, 107, 0, 0.15); color: var(--orange);
+      padding: 6px 16px; border-radius: 999px; font-size: 13px; font-weight: 600;
+      margin-bottom: 20px; border: 1px solid rgba(255, 107, 0, 0.3);
+    }
+    .date { font-size: 19px; font-weight: 600; color: var(--orange-soft); margin-bottom: 8px; }
+    section { padding: 50px 0; }
+    .cat-header { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+    .cat-icon {
+      width: 52px; height: 52px; background: linear-gradient(135deg, var(--orange), #ff3d00);
+      border-radius: 14px; display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 800; color: white;
+    }
+    .cat-title { font-size: 26px; font-weight: 700; }
+    .cat-desc { color: var(--text-muted); font-size: 14px; }
+    .noms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 22px;
+    }
+    .nom-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+      overflow: hidden; transition: all 0.25s ease; display: flex; flex-direction: column;
+    }
+    .nom-card:hover {
+      background: var(--card-hover); border-color: var(--orange);
+      transform: translateY(-4px); box-shadow: 0 12px 32px rgba(255, 107, 0, 0.15);
+    }
+    .nom-card.highlight {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 1px var(--orange), 0 8px 24px rgba(255, 107, 0, 0.25);
+    }
+    .nom-img-wrap {
+      position: relative; width: 100%; aspect-ratio: 1 / 1.1;
+      background: #1a1a1e; overflow: hidden;
+    }
+    .nom-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .nom-body { padding: 16px 18px; flex: 1; display: flex; flex-direction: column; }
+    .nom-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+    .nom-tag { font-size: 12px; color: var(--text-muted); margin-bottom: 14px; }
+    .nom-tag a { color: var(--orange-soft); text-decoration: none; }
+    .new-badge {
+      display: inline-block; background: var(--orange); color: #000;
+      font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;
+    }
+    .vote-row {
+      margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    }
+    .vote-count {
+      font-size: 14px; font-weight: 600; color: var(--orange-soft);
+      min-width: 40px;
+    }
+    .vote-btn {
+      flex: 1; background: var(--orange); color: #000; border: none;
+      padding: 10px 14px; border-radius: 10px; font-weight: 700; font-size: 13px;
+      cursor: pointer; transition: all 0.2s; font-family: inherit;
+    }
+    .vote-btn:hover { background: var(--orange-soft); transform: scale(1.02); }
+    .vote-btn:active { transform: scale(0.98); }
+    .vote-btn.voted { background: #333; color: var(--orange); cursor: default; }
+    .vote-btn.voted:hover { transform: none; background: #333; }
+    .winners { background: linear-gradient(180deg, transparent, rgba(255, 107, 0, 0.05)); }
+    .section-title { font-size: 28px; font-weight: 700; margin-bottom: 10px; text-align: center; }
+    .section-sub { text-align: center; color: var(--text-muted); margin-bottom: 36px; font-size: 15px; }
+    .winner-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+    .winner-card {
+      background: var(--card); border-radius: 14px; padding: 22px; text-align: center;
+      border: 1px solid var(--border);
+    }
+    .winner-card h3 { color: var(--orange); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+    .winner-name { font-size: 20px; font-weight: 700; }
+    footer {
+      border-top: 1px solid var(--border); padding: 36px 0; text-align: center;
+      color: var(--text-muted); font-size: 13px;
+    }
+    footer a { color: var(--orange-soft); }
+    .disclaimer { margin-top: 14px; font-size: 12px; opacity: 0.7; max-width: 620px; margin-left: auto; margin-right: auto; }
+    .total-votes {
+      text-align: center; margin-top: 24px; font-size: 15px; color: var(--text-muted);
+    }
+    .total-votes strong { color: var(--orange); }
+    @media (max-width: 640px) {
+      nav { display: none; }
+      .hero { padding: 40px 0 30px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <a href="#" class="logo">SLAY <span>2026</span></a>
+      <nav>
+        <a href="#king">SLAY King</a>
+        <a href="#queen">SLAY Queen</a>
+        <a href="#winners">Победители</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <div class="badge">ФАН-ВЕРСИЯ · ГОЛОСОВАНИЕ РАБОТАЕТ</div>
+      <div class="date">16.12.2026</div>
+      <h1>Главная премия<br><span class="accent">ру-стриминга</span></h1>
+      <p>Stream Legends Awards of the Year. Голосуй за любимых стримеров!</p>
+    </div>
+  </section>
+
+  <section id="king">
+    <div class="container">
+      <div class="cat-header">
+        <div class="cat-icon">👑</div>
+        <div>
+          <div class="cat-title">SLAY KING</div>
+          <div class="cat-desc">Стример года · один голос на категорию</div>
+        </div>
+      </div>
+
+      <div class="noms-grid">
+        <div class="nom-card highlight" data-id="timaevvv">
+          <div class="nom-img-wrap"><img src="timaevvv.png" alt="Timaevvv" class="nom-img"></div>
+          <div class="nom-body">
+            <div class="nom-name">Timaevvv <span class="new-badge">NEW</span></div>
+            <div class="nom-tag">Адам Тимаев · <a href="https://www.twitch.tv/timaevvv" target="_blank">Twitch</a></div>
+            <div class="vote-row">
+              <span class="vote-count" data-count="timaevvv">0</span>
+              <button class="vote-btn" data-cat="king" data-id="timaevvv">Проголосовать</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="nom-card" data-id="evelone">
+          <div class="nom-img-wrap"><img src="evelone.png" alt="evelone2004" class="nom-img"></div>
+          <div class="nom-body">
+            <div class="nom-name">evelone2004</div>
+            <div class="nom-tag">Вадим Козаков · <a href="https://www.twitch.tv/evelone2004" target="_blank">Twitch</a></div>
+            <div class="vote-row">
+              <span class="vote-count" data-count="evelone">0</span>
+              <button class="vote-btn" data-cat="king" data-id="evelone">Проголосовать</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="nom-card" data-id="bratishkin">
+          <div class="nom-img-wrap"><img src="bratishkin.png" alt="bratishkinoff" class="nom-img"></div>
+          <div class="nom-body">
+            <div class="nom-name">bratishkinoff</div>
+            <div class="nom-tag">Владимир Семенюк · <a href="https://www.twitch.tv/bratishkinoff" target="_blank">Twitch</a></div>
+            <div class="vote-row">
+              <span class="vote-count" data-count="bratishkin">0</span>
+              <button class="vote-btn" data-cat="king" data-id="bratishkin">Проголосовать</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="nom-card" data-id="leva2k">
+          <div class="nom-img-wrap"><img src="leva2k.png" alt="leva2k" class="nom-img"></div>
+          <div class="nom-body">
+            <div class="nom-name">leva2k</div>
+            <div class="nom-tag">Лев Богуш · <a href="https://www.twitch.tv/leva2k" target="_blank">Twitch</a></div>
+            <div class="vote-row">
+              <span class="vote-count" data-count="leva2k">0</span>
+              <button class="vote-btn" data-cat="king" data-id="leva2k">Проголосовать</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="nom-card" data-id="sasavot">
+          <div class="nom-img-wrap"><img src="sasavot.png" alt="sasavot" class="nom-img"></div>
+          <div class="nom-body">
+            <div class="nom-name">sasavot</div>
+            <div class="nom-tag">Глеб Орлов · <a href="https://www.twitch.tv/sasavot" target="_blank">Twitch</a></div>
+            <div class="vote-row">
+              <span class="vote-count" data-count="sasavot">0</span>
+              <button class="vote-btn" data-cat="king" data-id="sasavot">Проголосовать</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="nom-card" data-id="strogo">
+          <div class="nom-img-wrap"><img src="strogo.png" alt="StRoGo" class="nom-img"></div>
+          <div class="nom-body">
+            <div class="nom-name">StRoGo</div>
+            <div class="nom-tag">Иван Шурпатов · <a href="https://www.twitch.tv/strogo" target="_blank">Twitch</a></div>
+            <div class="vote-row">
+              <span class="vote-count" data-count="strogo">0</span>
+              <button class="vote-btn" data-cat="king" data-id="strogo">Проголосовать</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="nom-card" data-id="deepins">
+          <div class="nom-img-wrap"><img src="deepins.png" alt="deepins02" class="nom-img"></div>
+          <div class="nom-body">
+            <div class="nom-name">deepins02</div>
+            <div class="nom-tag">Иван Бессмертных · <a href="https://www.twitch.tv/deepins02" target="_blank">Twitch</a></div>
+            <div class="vote-row">
+              <span class="vote-count" data-count="deepins">0</span>
+              <button class="vote-btn" data-cat="king" data-id="deepins">Проголосовать</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="nom-card" data-id="anar">
+          <div class="nom-img-wrap"><img src="anar.png" alt="anarabdullaev" class="nom-img"></div>
+          <div class="nom-body">
+            <div class="nom-name">anarabdullaev</div>
+            <div class="nom-tag">Анар Абдуллаев · <a href="https://www.twitch.tv/anarabdullaev" target="_blank">Twitch</a></div>
+            <div class="vote-row">
+              <span class="vote-count" data-count="anar">0</span>
+              <button class="vote-btn" data-cat="king" data-id="anar">Проголосовать</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="total-votes">Голосов King: <strong id="total-king">0</strong></div>
+    </div>
+  </section>
+
+  <section id="queen" style="background: rgba(255,107,0,0.03);">
+    <div class="container">
+      <div class="cat-header">
+        <div class="cat-icon">♛</div>
+        <div>
+          <div class="cat-title">SLAY QUEEN</div>
+          <div class="cat-desc">Стримерша года · один голос на категорию</div>
+        </div>
+      </div>
+
+      <div class="noms-grid">
+        <div class="nom-card" data-id="gensyxa">
+          <div class="nom-img-wrap"><img src="gensyxa.png" alt="GENSYXA" class="nom-img"></div>
+          <div class="nom-body">
+            <div class="nom-name">GENSYXA</div>
+            <div class="nom-tag">Наталья Бердникова · <a href="https://www.twitch.tv/gensyxa" target="_blank">Twitch</a></div>
+            <div class="vote-row">
+              <span class="vote-count" data-count="gensyxa">0</span>
+              <button class="vote-btn" data-cat="queen" data-id="gensyxa">Проголосовать</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="nom-card" data-id="morphe">
+          <div class="nom-img-wrap"><img src="morphe.png" alt="morphe_ya" class="nom-img"></div>
+          <div class="nom-body">
+            <div class="nom-name">morphe_ya</div>
+            <div class="nom-tag">Валерия Высоцкая · <a href="https://www.twitch.tv/morphe_ya" target="_blank">Twitch</a></div>
+            <div class="vote-row">
+              <span class="vote-count" data-count="morphe">0</span>
+              <button class="vote-btn" data-cat="queen" data-id="morphe">Проголосовать</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="nom-card" data-id="byowl">
+          <div class="nom-img-wrap"><img src="byowl.png" alt="by_Owl" class="nom-img"></div>
+          <div class="nom-body">
+            <div class="nom-name">by_Owl</div>
+            <div class="nom-tag">Юлия Ивлева · <a href="https://www.twitch.tv/by_owl" target="_blank">Twitch</a></div>
+            <div class="vote-row">
+              <span class="vote-count" data-count="byowl">0</span>
+              <button class="vote-btn" data-cat="queen" data-id="byowl">Проголосовать</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="nom-card" data-id="gaechka">
+          <div class="nom-img-wrap"><img src="gaechka.png" alt="gaechka" class="nom-img"></div>
+          <div class="nom-body">
+            <div class="nom-name">gaechka</div>
+            <div class="nom-tag">Дарья Куданова · <a href="https://www.twitch.tv/gaechka" target="_blank">Twitch</a></div>
+            <div class="vote-row">
+              <span class="vote-count" data-count="gaechka">0</span>
+              <button class="vote-btn" data-cat="queen" data-id="gaechka">Проголосовать</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="total-votes">Голосов Queen: <strong id="total-queen">0</strong></div>
+    </div>
+  </section>
+
+  <section id="winners" class="winners">
+    <div class="container">
+      <h2 class="section-title">Победители прошлых лет</h2>
+      <p class="section-sub">История SLAY King & Queen</p>
+      <div class="winner-grid">
+        <div class="winner-card"><h3>2025 · SLAY King</h3><div class="winner-name">SASAVOT</div></div>
+        <div class="winner-card"><h3>2025 · SLAY Queen</h3><div class="winner-name">GENSYXA</div></div>
+        <div class="winner-card"><h3>2024 · SLAY King</h3><div class="winner-name">bratishkinoff</div></div>
+        <div class="winner-card"><h3>2024 · SLAY Queen</h3><div class="winner-name">morphe_ya</div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>Фан-страница · голоса сохраняются в общей базе данных</p>
+      <p class="disclaimer">
+        Неофициальная фан-версия. Официальный сайт: <a href="https://slay-award.ru/" target="_blank">slay-award.ru</a>.
+        Все права на бренд SLAY / WINLINE принадлежат их владельцам.
+        Фото предоставлены пользователем. Голосование работает через Supabase. Ограничение повторного голоса привязано к браузеру.
+      </p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Вставь сюда Project URL и публичный anon/publishable key из Supabase.
+  
+const SUPABASE_URL = 'https://dtetgkgzpsyzahtvijeb.supabase.co';
+
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0ZXRna2d6cHN5emFodHZpamViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxMTk4MDQsImV4cCI6MjExMDY5NTgwNH0.FyGnLHWgUu4hlY5ucvEw4DWVjmMWEhMCauQXAXLoQnA';
+
+const KING_IDS = [
+  'timaevvv', 'evelone', 'bratishkin', 'leva2k',
+  'sasavot', 'strogo', 'deepins', 'anar'
+];
+
+const QUEEN_IDS = [
+  'gensyxa', 'morphe', 'byowl', 'gaechka'
+];
+
+const ready =
+  SUPABASE_URL.startsWith('https://') &&
+  SUPABASE_ANON_KEY.length > 20;
+
+const db = ready
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  : null;
+
+    function voterId() {
+      let id = localStorage.getItem('slay_voter_id');
+      if (!id) {
+        id = crypto.randomUUID();
+        localStorage.setItem('slay_voter_id', id);
+      }
+      return id;
+    }
+
+    function setupNotice() {
+      const badge = document.querySelector('.hero .badge');
+      if (badge) badge.textContent = 'ТРЕБУЕТСЯ ПОДКЛЮЧЕНИЕ SUPABASE';
+    }
+
+    async function loadVotes() {
+      if (!db) { setupNotice(); return; }
+      const { data, error } = await db.from('slay_votes').select('category, nominee_id, voter_id');
+      if (error) {
+        console.error(error);
+        alert('Не удалось загрузить голоса. Проверь настройки Supabase.');
+        return;
+      }
+
+      const counts = {};
+      let kingTotal = 0, queenTotal = 0;
+      data.forEach(row => {
+        counts[row.nominee_id] = (counts[row.nominee_id] || 0) + 1;
+        if (row.category === 'king') kingTotal++;
+        if (row.category === 'queen') queenTotal++;
+      });
+
+      [...KING_IDS, ...QUEEN_IDS].forEach(id => {
+        const el = document.querySelector('[data-count="' + id + '"]');
+        if (el) el.textContent = counts[id] || 0;
+      });
+      document.getElementById('total-king').textContent = kingTotal;
+      document.getElementById('total-queen').textContent = queenTotal;
+
+      const voted = new Set(data.filter(row => row.voter_id === voterId()).map(row => row.category));
+      document.querySelectorAll('.vote-btn').forEach(btn => {
+        const done = voted.has(btn.dataset.cat);
+        btn.disabled = done;
+        btn.classList.toggle('voted', done);
+        btn.textContent = done ? 'Уже голосовал' : 'Проголосовать';
+      });
+    }
+
+    async function vote(cat, id) {
+      if (!db) {
+        setupNotice();
+        alert('Сначала подключи Supabase по инструкции в README_SLay.txt.');
+        return;
+      }
+      const allowed = cat === 'king' ? KING_IDS : cat === 'queen' ? QUEEN_IDS : [];
+      if (!allowed.includes(id)) return;
+
+      const btn = document.querySelector('.vote-btn[data-cat="' + cat + '"][data-id="' + id + '"]');
+      if (btn) { btn.disabled = true; btn.textContent = 'Сохраняем...'; }
+
+      const { error } = await db.from('slay_votes').insert({
+        category: cat, nominee_id: id, voter_id: voterId()
+      });
+      if (error) {
+        console.error(error);
+        alert(error.code === '23505' ? 'Ты уже голосовал в этой категории!' : 'Не удалось сохранить голос. Проверь подключение.');
+      } else {
+        alert('Голос засчитан!');
+      }
+      await loadVotes();
+    }
+
+    document.querySelectorAll('.vote-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!btn.disabled) vote(btn.dataset.cat, btn.dataset.id);
+      });
+    });
+
+    if (db) {
+      loadVotes();
+      db.channel('slay-votes-live')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'slay_votes' }, loadVotes)
+        .subscribe();
+    } else setupNotice();
+  </script>
+</body>
+</html>
