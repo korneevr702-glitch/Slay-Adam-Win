@@ -76,6 +76,10 @@
       border-color: var(--orange);
       box-shadow: 0 0 0 1px var(--orange), 0 8px 24px rgba(255, 107, 0, 0.25);
     }
+    .nom-card.my-vote {
+      border-color: #22c55e;
+      box-shadow: 0 0 0 1px #22c55e, 0 8px 24px rgba(34, 197, 94, 0.2);
+    }
     .nom-img-wrap {
       position: relative; width: 100%; aspect-ratio: 1 / 1.1;
       background: #1a1a1e; overflow: hidden;
@@ -103,8 +107,12 @@
     }
     .vote-btn:hover { background: var(--orange-soft); transform: scale(1.02); }
     .vote-btn:active { transform: scale(0.98); }
-    .vote-btn.voted { background: #333; color: var(--orange); cursor: default; }
+    .vote-btn.voted { background: #333; color: var(--text-muted); cursor: default; }
     .vote-btn.voted:hover { transform: none; background: #333; }
+    .vote-btn.cancel {
+      background: #dc2626; color: white;
+    }
+    .vote-btn.cancel:hover { background: #ef4444; transform: scale(1.02); }
     .winners { background: linear-gradient(180deg, transparent, rgba(255, 107, 0, 0.05)); }
     .section-title { font-size: 28px; font-weight: 700; margin-bottom: 10px; text-align: center; }
     .section-sub { text-align: center; color: var(--text-muted); margin-bottom: 36px; font-size: 15px; }
@@ -145,7 +153,7 @@
 
   <section class="hero">
     <div class="container">
-      <div class="badge">ФАН-ВЕРСИЯ · ГОЛОСОВАНИЕ РАБОТАЕТ</div>
+      <div class="badge">ФАН-ВЕРСИЯ · ГОЛОСОВАНИЕ + ОТМЕНА</div>
       <div class="date">16.12.2026</div>
       <h1>Главная премия<br><span class="accent">ру-стриминга</span></h1>
       <p>Stream Legends Awards of the Year. Голосуй за любимых стримеров!</p>
@@ -158,7 +166,7 @@
         <div class="cat-icon">👑</div>
         <div>
           <div class="cat-title">SLAY KING</div>
-          <div class="cat-desc">Стример года · один голос на категорию</div>
+          <div class="cat-desc">Стример года · можно отменить голос</div>
         </div>
       </div>
 
@@ -270,7 +278,7 @@
         <div class="cat-icon">♛</div>
         <div>
           <div class="cat-title">SLAY QUEEN</div>
-          <div class="cat-desc">Стримерша года · один голос на категорию</div>
+          <div class="cat-desc">Стримерша года · можно отменить голос</div>
         </div>
       </div>
 
@@ -322,8 +330,20 @@
             </div>
           </div>
         </div>
-      </div> 
-      
+
+        <div class="nom-card highlight" data-id="alenarusskovvva">
+          <div class="nom-img-wrap"><img src="alenarusskovvva.png" alt="alenarusskovvva" class="nom-img"></div>
+          <div class="nom-body">
+            <div class="nom-name">alenarusskovvva <span class="new-badge">NEW</span></div>
+            <div class="nom-tag">Алёна · <a href="https://www.twitch.tv/alenarusskovvva" target="_blank">Twitch</a></div>
+            <div class="vote-row">
+              <span class="vote-count" data-count="alenarusskovvva">0</span>
+              <button class="vote-btn" data-cat="queen" data-id="alenarusskovvva">Проголосовать</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="total-votes">Голосов Queen: <strong id="total-queen">0</strong></div>
     </div>
   </section>
@@ -343,39 +363,39 @@
 
   <footer>
     <div class="container">
-      <p>Фан-страница · голоса сохраняются в общей базе данных</p>
+      <p>Фан-страница · голоса сохраняются в общей базе · можно отменить</p>
       <p class="disclaimer">
         Неофициальная фан-версия. Официальный сайт: <a href="https://slay-award.ru/" target="_blank">slay-award.ru</a>.
         Все права на бренд SLAY / WINLINE принадлежат их владельцам.
-        Голосование работает через Supabase. Ограничение повторного голоса привязано к браузеру.
+        Голосование работает через Supabase. Можно отменить свой голос и проголосовать за другого.
       </p>
     </div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // Вставь сюда Project URL и публичный anon/publishable key из Supabase.
-  
-const SUPABASE_URL = 'https://dtetgkgzpsyzahtvijeb.supabase.co';
+    const SUPABASE_URL = 'https://dtetgkgzpsyzahtvijeb.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0ZXRna2d6cHN5emFodHZpamViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxMTk4MDQsImV4cCI6MjExMDY5NTgwNH0.FyGnLHWgUu4hlY5ucvEw4DWVjmMWEhMCauQXAXLoQnA';
 
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0ZXRna2d6cHN5emFodHZpamViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxMTk4MDQsImV4cCI6MjExMDY5NTgwNH0.FyGnLHWgUu4hlY5ucvEw4DWVjmMWEhMCauQXAXLoQnA';
+    const KING_IDS = [
+      'timaevvv', 'evelone', 'bratishkin', 'leva2k',
+      'sasavot', 'strogo', 'deepins', 'anar'
+    ];
 
-const KING_IDS = [
-  'timaevvv', 'evelone', 'bratishkin', 'leva2k',
-  'sasavot', 'strogo', 'deepins', 'anar'
-];
+    const QUEEN_IDS = [
+      'gensyxa', 'morphe', 'byowl', 'gaechka', 'alenarusskovvva'
+    ];
 
-const QUEEN_IDS = [
-  'gensyxa', 'morphe', 'byowl', 'gaechka'
-];
+    const ready =
+      SUPABASE_URL.startsWith('https://') &&
+      SUPABASE_ANON_KEY.length > 20;
 
-const ready =
-  SUPABASE_URL.startsWith('https://') &&
-  SUPABASE_ANON_KEY.length > 20;
+    const db = ready
+      ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+      : null;
 
-const db = ready
-  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-  : null;
+    // хранит, за кого я проголосовал: { king: 'timaevvv', queen: 'gensyxa' }
+    let myVotes = { king: null, queen: null };
 
     function voterId() {
       let id = localStorage.getItem('slay_voter_id');
@@ -391,9 +411,44 @@ const db = ready
       if (badge) badge.textContent = 'ТРЕБУЕТСЯ ПОДКЛЮЧЕНИЕ SUPABASE';
     }
 
+    function updateButtons() {
+      document.querySelectorAll('.nom-card').forEach(card => {
+        card.classList.remove('my-vote');
+      });
+
+      document.querySelectorAll('.vote-btn').forEach(btn => {
+        const cat = btn.dataset.cat;
+        const id = btn.dataset.id;
+        const myChoice = myVotes[cat];
+
+        btn.classList.remove('voted', 'cancel');
+        btn.disabled = false;
+
+        if (myChoice) {
+          if (myChoice === id) {
+            // мой голос — кнопка отмены
+            btn.classList.add('cancel');
+            btn.textContent = 'Отменить голос';
+            btn.closest('.nom-card').classList.add('my-vote');
+          } else {
+            // уже голосовал за другого
+            btn.classList.add('voted');
+            btn.textContent = 'Уже голосовал';
+            btn.disabled = true;
+          }
+        } else {
+          btn.textContent = 'Проголосовать';
+        }
+      });
+    }
+
     async function loadVotes() {
       if (!db) { setupNotice(); return; }
-      const { data, error } = await db.from('slay_votes').select('category, nominee_id, voter_id');
+
+      const { data, error } = await db
+        .from('slay_votes')
+        .select('category, nominee_id, voter_id');
+
       if (error) {
         console.error(error);
         alert('Не удалось загрузить голоса. Проверь настройки Supabase.');
@@ -402,10 +457,17 @@ const db = ready
 
       const counts = {};
       let kingTotal = 0, queenTotal = 0;
+      myVotes = { king: null, queen: null };
+
       data.forEach(row => {
         counts[row.nominee_id] = (counts[row.nominee_id] || 0) + 1;
         if (row.category === 'king') kingTotal++;
         if (row.category === 'queen') queenTotal++;
+
+        // мой голос
+        if (row.voter_id === voterId()) {
+          myVotes[row.category] = row.nominee_id;
+        }
       });
 
       [...KING_IDS, ...QUEEN_IDS].forEach(id => {
@@ -415,42 +477,70 @@ const db = ready
       document.getElementById('total-king').textContent = kingTotal;
       document.getElementById('total-queen').textContent = queenTotal;
 
-      const voted = new Set(data.filter(row => row.voter_id === voterId()).map(row => row.category));
-      document.querySelectorAll('.vote-btn').forEach(btn => {
-        const done = voted.has(btn.dataset.cat);
-        btn.disabled = done;
-        btn.classList.toggle('voted', done);
-        btn.textContent = done ? 'Уже голосовал' : 'Проголосовать';
-      });
+      updateButtons();
     }
 
     async function vote(cat, id) {
       if (!db) {
         setupNotice();
-        alert('Сначала подключи Supabase по инструкции в README_SLay.txt.');
+        alert('Сначала подключи Supabase.');
         return;
       }
+
       const allowed = cat === 'king' ? KING_IDS : cat === 'queen' ? QUEEN_IDS : [];
       if (!allowed.includes(id)) return;
 
       const btn = document.querySelector('.vote-btn[data-cat="' + cat + '"][data-id="' + id + '"]');
+
+      // ===== ОТМЕНА ГОЛОСА =====
+      if (myVotes[cat] === id) {
+        if (btn) { btn.disabled = true; btn.textContent = 'Отменяем...'; }
+
+        const { error } = await db
+          .from('slay_votes')
+          .delete()
+          .eq('category', cat)
+          .eq('voter_id', voterId());
+
+        if (error) {
+          console.error(error);
+          alert('Не удалось отменить голос.');
+        } else {
+          // тихо обновится через realtime / loadVotes
+        }
+        await loadVotes();
+        return;
+      }
+
+      // уже голосовал за другого
+      if (myVotes[cat]) {
+        alert('Сначала отмени свой текущий голос!');
+        return;
+      }
+
+      // ===== НОВЫЙ ГОЛОС =====
       if (btn) { btn.disabled = true; btn.textContent = 'Сохраняем...'; }
 
       const { error } = await db.from('slay_votes').insert({
-        category: cat, nominee_id: id, voter_id: voterId()
+        category: cat,
+        nominee_id: id,
+        voter_id: voterId()
       });
+
       if (error) {
         console.error(error);
-        alert(error.code === '23505' ? 'Ты уже голосовал в этой категории!' : 'Не удалось сохранить голос. Проверь подключение.');
-      } else {
-        alert('Голос засчитан!');
+        alert(error.code === '23505'
+          ? 'Ты уже голосовал в этой категории!'
+          : 'Не удалось сохранить голос. Проверь подключение.');
       }
+
       await loadVotes();
     }
 
     document.querySelectorAll('.vote-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        if (!btn.disabled) vote(btn.dataset.cat, btn.dataset.id);
+        if (btn.classList.contains('voted')) return;
+        vote(btn.dataset.cat, btn.dataset.id);
       });
     });
 
@@ -459,7 +549,9 @@ const db = ready
       db.channel('slay-votes-live')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'slay_votes' }, loadVotes)
         .subscribe();
-    } else setupNotice();
+    } else {
+      setupNotice();
+    }
   </script>
 </body>
 </html>
